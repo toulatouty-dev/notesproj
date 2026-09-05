@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Notes</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+
+        <h2>My Notes</h2>
+
+        <button id="logoutBtn" class="logout-btn">
+            Logout
+        </button>
+
+    </header>
+
+
+    <main class="notes-container">
+
+        <section class="add-note">
+
+            <h1>Add a Note</h1>
+
+            <form id="noteForm">
+
+                <div class="form-group">
+                    <label for="noteTitle">Title</label>
+
+                    <input
+                        type="text"
+                        id="noteTitle"
+                        placeholder="Note title"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="noteContent">Content</label>
+
+                    <textarea
+                        id="noteContent"
+                        placeholder="Write your note..."
+                        rows="5"
+                        required
+                    ></textarea>
+                </div>
+
+                <button type="submit" class="btn">
+                    Add Note
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <section class="notes-list">
+
+            <h1>My Notes</h1>
+
+            <div id="notesContainer">
+                <!-- Notes will be added here by JavaScript -->
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script src="js/notes.js"></script>
+    <script src="js/add-note.js"></script>
+    <script src="js/delete-note.js"></script>
+
+</body>
+</html>
