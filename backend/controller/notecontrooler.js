@@ -1,17 +1,12 @@
 const Note = require("../modules/note");
 
 exports.getNotes = async (req, res) => {
-  
-  const notes = await Note.find({ user: req.user.id });
+  const notes = await Note.find();
   res.json(notes);
 };
 
 exports.addNote = async (req, res) => {
-
-  const newNote = new Note({
-    ...req.body,
-    user: req.user.id
-  });
+  const newNote = new Note(req.body);
   await newNote.save();
   res.json(newNote);
 };
