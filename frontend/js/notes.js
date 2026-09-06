@@ -1,107 +1,46 @@
 const notesContainer = document.getElementById("notesContainer");
+const logoutButton = document.getElementById("logoutBtn");
 
-/*
-    ============================================
-    MOCK NOTES
-    ============================================
+logoutButton.addEventListener("click", () => {
+  localStorage.clear();
+  window.location.href = "index.html";
+});
 
-    This simulates data coming from the backend.
-
-    Later, replace the mock data with:
-
-    fetch("http://localhost:3000/api/notes", {
-        method: "GET",
-
-        headers: {
-            "Content-Type": "application/json",
-
-            // If your backend uses JWT:
-            // "Authorization": `Bearer ${token}`
-        }
-    })
-
-    .then(response => response.json())
-
-    .then(data => {
-        displayNotes(data);
-    })
-
-    .catch(error => {
-        console.error(error);
-    });
-*/
-
-fetch("http://localhost:3000/api/notes")
-  .then((res) => res.json())
-  .then((notes) => displayNotes(notes));
+fetch("http://localhost:3000/api/notes",{
+  headers: {
+    "Authorization": `Bearer ${localStorage.getItem("token")}`
+  }
+})
+  .then((res) => {
+    if (!res.ok) {
+      throw new Error(`Unable to load notes (${res.status})`);
+    }
+    return res.json();
+  })
+  .then((notes) => {
+    displayNotes(notes);
+  })
+  .catch((error) => {
+    console.error(error);
+    notesContainer.innerHTML = "<p>Unable to load notes.</p>";
+  });
 
 function displayNotes(notes) {
   notesContainer.innerHTML = "";
+
+  if (!Array.isArray(notes) || notes.length === 0) {
+    notesContainer.innerHTML = "<p>No notes available.</p>";
+    return;
+  }
+
   notes.forEach((note) => {
     const div = document.createElement("div");
     div.classList.add("note-card");
     div.innerHTML = `
       <h3>${note.title}</h3>
       <p>${note.content}</p>
-      <button onclick="deleteNote('${note._id}')">Delete</button>
+      <button class="delete-btn" onclick="deleteNote('${note._id}')">Delete</button>
     `;
     notesContainer.appendChild(div);
   });
 }
-
-let notes = [
-  {
-    id: 1,
-    title: "Learn JavaScript",
-    content: "Study functions, arrays and objects.",
-  },
-
-  {
-    id: 2,
-    title: "Build a project",
-    content: "Create a small Notes application.",
-  },
-
-  {
-    id: 3,
-    title: "Learn Fetch API",
-    content: "Understand how frontend communicates with backend.",
-  },
-];
-
-// Display notes
-function displayNotes(data) {
-  notesContainer.innerHTML = "";
-
-  if (notes.length === 0) {
-    notesContainer.innerHTML = `
-            <p>No notes available.</p>
-        `;
-
-    return;
-  }
-
-  data.forEach(function (note) {
-    const noteElement = document.createElement("div");
-
-    noteElement.classList.add("note-card");
-
-    noteElement.innerHTML = `
-            <h3>${note.title}</h3>
-
-            <p>${note.content}</p>
-
-            <button
-                class="delete-btn"
-                onclick="deleteNote('${note._id}')"
-            >
-                Delete
-            </button>
-        `;
-
-    notesContainer.appendChild(noteElement);
-  });
-}
-
-// Initial display
-displayNotes(notes);

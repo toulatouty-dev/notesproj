@@ -30,7 +30,11 @@ function deleteNote(noteId) {
 
 
   fetch(`http://localhost:3000/api/notes/${noteId}`, {
-    method: "DELETE"
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+    }
   })
     .then((res) => res.json())
     .then(() => {
