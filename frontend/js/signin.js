@@ -40,17 +40,26 @@ signinForm.addEventListener("submit", (event) => {
         });
     */
 
-  fetch("http://localhost:3000/api/auth/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password })
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.token) localStorage.setItem("token", data.token);
-      window.location.href = "notes.html";
-    });
-
+ fetch("http://localhost:3000/api/auth/login", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ email, password })
+})
+.then((res) => {
+  if (!res.ok) {
+    throw new Error("not valid");
+  }
+  return res.json();
+})
+.then((data) => {
+  if (data.token) {
+    localStorage.setItem("token", data.token);
+    window.location.href = "notes.html";
+  }
+})
+.catch((err) => {
+  alert(err.message); 
+});
 
   // Mock user
   const mockUser = {
